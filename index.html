@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Found | Your Career Navigator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .skill-tag {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-tag:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass-card border-r border-slate-800/50 p-6 flex flex-col hidden md:flex">
+        <div class="flex items-center gap-2 mb-10">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
+                <i data-lucide="map-pin" class="text-white w-5 h-5"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight text-white">Path Found</span>
+        </div>
+
+        <nav class="space-y-2 flex-1">
+            <a href="#" class="flex items-center gap-3 p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all">
+                <i data-lucide="milestone" class="w-5 h-5"></i>
+                <span class="font-medium">Roadmaps</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+                <span class="font-medium">Explore Page</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-slate-800/50">
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+                    <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar">
+                    </div>
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-semibold text-white truncate">Alex Rivera</p>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold">Lvl 14 Dev</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 bg-[radial-gradient(circle_at_50%_0%,_#1e1b4b_0%,_#020617_60%)]">
+        
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight">Growth Center</h1>
+                <p class="text-slate-400 text-sm">Visualizing mastery creep across your stack.</p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Progressive Mastery Card -->
+            <div class="lg:col-span-2 glass-card rounded-[32px] p-8 border border-white/5 shadow-2xl">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Skill Lane Creep</h2>
+                        <p class="text-xs text-slate-500 font-medium">Slices expand outward as you approach 100% Goal</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500/20"></span>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase">Empty Track</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase">Progress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative flex justify-center items-center py-6">
+                    <div class="w-full max-w-[440px] relative">
+                        <canvas id="skillChart"></canvas>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                            <span class="block text-[10px] font-black text-slate-500 uppercase tracking-widest">Mastery</span>
+                            <span class="block text-2xl font-black text-white">68%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats/Actions -->
+            <div class="space-y-6">
+                <div class="glass-card rounded-[32px] p-7 border-t-4 border-indigo-600 shadow-xl bg-gradient-to-b from-indigo-500/5 to-transparent">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Focus Domain</h3>
+                    <p class="text-lg font-bold text-white mb-1">Backend Engineering</p>
+                    <p class="text-xs text-indigo-400 mb-6">You are 90% to the next milestone</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-[11px] font-bold">
+                            <span class="text-slate-400 uppercase">Lane Width</span>
+                            <span class="text-white">Activity Based</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] font-bold">
+                            <span class="text-slate-400 uppercase">Creep Velocity</span>
+                            <span class="text-emerald-400">+12% this week</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-[32px] p-7 border border-white/5">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Verified Stacks</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="skill-tag p-3 rounded-2xl border-blue-500/20">
+                            <span class="text-[11px] font-bold text-white block">DSA</span>
+                            <span class="text-[9px] text-slate-500">82% Outward</span>
+                        </div>
+                        <div class="skill-tag p-3 rounded-2xl border-purple-500/20">
+                            <span class="text-[11px] font-bold text-white block">Backend</span>
+                            <span class="text-[9px] text-slate-500">90% Outward</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Custom Plugin to draw the "Ghost" background lanes
+        // This represents the "Total Potential" or Goal
+        const laneBackgroundPlugin = {
+            id: 'laneBackground',
+            beforeDatasetsDraw(chart) {
+                const { ctx, chartArea: { top, bottom, left, right }, scales: { r } } = chart;
+                const dataset = chart.data.datasets[0];
+                const meta = chart.getDatasetMeta(0);
+                
+                ctx.save();
+                meta.data.forEach((element, index) => {
+                    const startAngle = element.startAngle;
+                    const endAngle = element.endAngle;
+                    const innerRadius = r.getDistanceFromCenterForValue(0);
+                    const outerRadius = r.getDistanceFromCenterForValue(100); // Max goal
+                    
+                    // The "Ghost" lane: Deeper, translucent version of the slice color
+                    const baseColor = dataset.backgroundColor[index];
+                    // Strip alpha and replace with 0.1 for the background lane
+                    const ghostColor = baseColor.replace(/[\d.]+\)$/g, '0.15)');
+                    
+                    ctx.beginPath();
+                    ctx.arc(r.xCenter, r.yCenter, outerRadius, startAngle, endAngle);
+                    ctx.arc(r.xCenter, r.yCenter, innerRadius, endAngle, startAngle, true);
+                    ctx.closePath();
+                    ctx.fillStyle = ghostColor;
+                    ctx.fill();
+                });
+                ctx.restore();
+            }
+        };
+
+        const ctx = document.getElementById('skillChart').getContext('2d');
+        
+        const chart = new Chart(ctx, {
+            type: 'polarArea',
+            plugins: [laneBackgroundPlugin],
+            data: {
+                labels: ['DSA', 'Frontend', 'Backend', 'DevOps', 'System Design'],
+                datasets: [{
+                    // The "Work Intensity" (Lane Width) is handled by slice angle in Polar Area automatically
+                    // The "Progress to Goal" is the actual data value
+                    data: [82, 45, 90, 55, 30], 
+                    backgroundColor: [
+                        'rgba(37, 99, 235, 0.8)',   // Blue
+                        'rgba(56, 189, 248, 0.8)',  // Sky
+                        'rgba(126, 34, 206, 0.8)',  // Purple
+                        'rgba(236, 72, 153, 0.8)',  // Pink
+                        'rgba(99, 102, 241, 0.8)'   // Indigo
+                    ],
+                    borderColor: 'rgba(255,255,255,0.2)',
+                    borderWidth: 2,
+                    hoverBorderWidth: 4,
+                    hoverBorderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        startAngle: -90,
+                        innerRadius: '20%', // Sleek center hole
+                        angleLines: { display: false },
+                        grid: { display: false },
+                        ticks: { display: false, max: 100 }, // Scale goes to 100 for the "creep"
+                        pointLabels: {
+                            display: true,
+                            font: { size: 12, weight: '800', family: 'Plus Jakarta Sans' },
+                            color: '#94a3b8',
+                            padding: 20
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#020617',
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: (item) => ` Mastery: ${item.raw}% toward Senior Goal`
+                        }
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
