@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Path Found | Explore Paths</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #020617;
+        color: #f8fafc;
+      }
+
+      .glass-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .category-pill.active {
+        background-color: #4f46e5;
+        color: white;
+        border-color: #6366f1;
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+      }
+
+      .skill-card.active {
+        background: rgba(79, 70, 229, 0.2);
+        border-color: #6366f1;
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.15);
+      }
+
+      .nav-link.active {
+        background: rgba(79, 70, 229, 0.1);
+        color: #818cf8;
+        border: 1px solid rgba(79, 70, 229, 0.2);
+      }
+
+      /* Animations */
+      .fade-in-up {
+        animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="flex min-h-screen overflow-hidden">
+    <!-- Sidebar (Shared Component) -->
+    <aside
+      class="w-64 glass-card border-r border-slate-800/50 p-6 flex flex-col hidden md:flex"
+    >
+      <div class="flex items-center gap-2 mb-10">
+        <div
+          class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+        >
+          <i data-lucide="map-pin" class="text-white w-5 h-5"></i>
+        </div>
+        <span class="text-xl font-bold text-white tracking-tight"
+          >Path Found</span
+        >
+      </div>
+
+      <nav class="space-y-2 flex-1">
+        <a
+          href="index.html"
+          class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all"
+        >
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span class="font-medium">Dashboard</span>
+        </a>
+        <a
+          href="explore.html"
+          class="nav-link active flex items-center gap-3 p-3 rounded-xl transition-all"
+        >
+          <i data-lucide="compass" class="w-5 h-5"></i>
+          <span class="font-medium">Explore Page</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Viewport -->
+    <div
+      class="flex-1 overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,_#1e1b4b_0%,_#020617_60%)]"
+    >
+      <main class="max-w-7xl mx-auto px-6 py-10 md:py-16">
+        <!-- Header Section -->
+        <header
+          class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12"
+        >
+          <div>
+            <h1 class="text-4xl font-extrabold text-white mb-2 tracking-tight">
+              Explore Paths
+            </h1>
+            <p class="text-slate-400">
+              Discover and track specialized roadmaps built for the modern dev.
+            </p>
+          </div>
+          <div class="relative w-full md:w-96">
+            <i
+              data-lucide="search"
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4"
+            ></i>
+            <input
+              id="skillSearch"
+              type="text"
+              placeholder="Search skills, tools, or roadmaps..."
+              class="w-full pl-12 pr-4 py-3 rounded-2xl bg-slate-900/50 border border-white/10 text-white focus:ring-2 focus:ring-indigo-500/50 focus:outline-none transition-all placeholder:text-slate-600"
+            />
+          </div>
+        </header>
+
+        <!-- Category Filter Pills -->
+        <div
+          id="categoryFilters"
+          class="flex flex-wrap items-center gap-3 mb-10"
+        >
+          <button
+            data-cat="all"
+            class="category-pill active px-5 py-2 rounded-full border border-white/5 text-sm font-bold transition-all flex items-center gap-2"
+          >
+            <i data-lucide="layers" class="w-4 h-4"></i> All Skills
+          </button>
+          <button
+            data-cat="swe"
+            class="category-pill px-5 py-2 rounded-full border border-white/5 text-sm font-bold transition-all flex items-center gap-2 hover:border-indigo-500/50"
+          >
+            <i data-lucide="code" class="w-4 h-4 text-blue-400"></i> Software
+            Engineering
+          </button>
+          <button
+            data-cat="oss"
+            class="category-pill px-5 py-2 rounded-full border border-white/5 text-sm font-bold transition-all flex items-center gap-2 hover:border-purple-500/50"
+          >
+            <i data-lucide="git-branch" class="w-4 h-4 text-purple-400"></i>
+            Open Source
+          </button>
+          <button
+            data-cat="internship"
+            class="category-pill px-5 py-2 rounded-full border border-white/5 text-sm font-bold transition-all flex items-center gap-2 hover:border-emerald-500/50"
+          >
+            <i data-lucide="briefcase" class="w-4 h-4 text-emerald-400"></i>
+            Internships
+          </button>
+        </div>
+
+        <!-- Skill Catalog Grid -->
+        <div
+          id="skillGrid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16"
+        >
+          <!-- Skill cards injected here -->
+        </div>
+
+        <!-- Detailed Roadmap Display Area -->
+        <div id="detailView" class="hidden">
+          <!-- Detailed content (DSA or Standard) injected here -->
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Data logic translated from React
+      const ALL_SKILLS = [
+        {
+          id: "dsa",
+          title: "Data Structures & Algorithms",
+          category: "swe",
+          tags: ["Interviews", "Logic"],
+        },
+        {
+          id: "system-design",
+          title: "System Design",
+          category: "swe",
+          tags: ["Architecture", "Scale"],
+        },
+        {
+          id: "frontend",
+          title: "Frontend Development",
+          category: "swe",
+          tags: ["React", "UI/UX"],
+        },
+        {
+          id: "backend",
+          title: "Backend Development",
+          category: "swe",
+          tags: ["APIs", "Databases"],
+        },
+        {
+          id: "git-mastery",
+          title: "Git Mastery",
+          category: "oss",
+          tags: ["Version Control"],
+        },
+        {
+          id: "first-contributions",
+          title: "First Contributions",
+          category: "oss",
+          tags: ["GitHub", "Community"],
+        },
+        {
+          id: "gsoc-prep",
+          title: "GSoC Preparation",
+          category: "oss",
+          tags: ["Open Source"],
+        },
+        {
+          id: "resume-building",
+          title: "Resume & Branding",
+          category: "internship",
+          tags: ["Career", "ATS"],
+        },
+        {
+          id: "mock-interviews",
+          title: "Mock Interviews",
+          category: "internship",
+          tags: ["Soft Skills"],
+        },
+        {
+          id: "portfolio",
+          title: "Portfolio Building",
+          category: "internship",
+          tags: ["Projects"],
+        },
+      ];
+
+      const SKILL_DETAILS = {
+        dsa: {
+          title: "Data Structures & Algorithms",
+          description:
+            "The foundation of computer science. Master it to crack interviews at top tech companies.",
+          isDSASpecial: true,
+          platforms: [
+            {
+              name: "HackerRank",
+              level: "Beginner",
+              quality: "Structured Learning",
+              icon: "medal",
+              color: "emerald",
+              url: "https://hackerrank.com",
+              desc: "Focus on fundamental syntax and basic problem solving through specific language tracks.",
+              highlight: "Great for building confidence with easy constraints.",
+            },
+            {
+              name: "LeetCode",
+              level: "Intermediate",
+              quality: "Interview Patterns",
+              icon: "zap",
+              color: "yellow",
+              url: "https://leetcode.com",
+              desc: "The industry standard for FAANG interviews. Known for rigorous test cases and massive community.",
+              highlight:
+                "Teaches you the Patterns (Sliding Window, Backtracking).",
+            },
+            {
+              name: "CodeForces",
+              level: "Expert",
+              quality: "Optimization Speed",
+              icon: "flame",
+              color: "red",
+              url: "https://codeforces.com",
+              desc: "Extreme competitive programming, complex mathematical logic, and time optimizations.",
+              highlight: "The training ground for the top 1% developers.",
+            },
+          ],
+        },
+        "first-contributions": {
+          title: "First Contributions",
+          description: "Start your journey in the open-source world.",
+          roadmap: [
+            {
+              level: "Setup",
+              platform: "GitHub",
+              content: "Forking & Pull Requests",
+              url: "https://github.com",
+            },
+            {
+              level: "Start",
+              platform: "First Timers Only",
+              content: "Find Beginner Friendly Issues",
+              url: "https://firsttimersonly.com",
+            },
+          ],
+        },
+      };
+
+      let currentCategory = "all";
+      let searchQuery = "";
+      let activeSkillId = null;
+
+      function renderSkills() {
+        const grid = document.getElementById("skillGrid");
+        const filtered = ALL_SKILLS.filter((s) => {
+          const matchesCat =
+            currentCategory === "all" || s.category === currentCategory;
+          const matchesSearch = s.title
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
+          return matchesCat && matchesSearch;
+        });
+
+        grid.innerHTML = filtered
+          .map(
+            (skill) => `
+                <button onclick="handleSkillClick('${skill.id}')" class="skill-card glass-card p-6 rounded-[32px] text-left transition-all border border-white/5 hover:border-indigo-500/50 group ${activeSkillId === skill.id ? "active" : ""}">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded text-slate-500 group-hover:text-indigo-400 transition-colors">
+                            ${skill.category}
+                        </span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-white transition-all group-hover:translate-x-1"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white mb-2 leading-tight">${skill.title}</h3>
+                    <div class="flex flex-wrap gap-2">
+                        ${skill.tags.map((t) => `<span class="text-[10px] text-slate-500">#${t}</span>`).join("")}
+                    </div>
+                </button>
+            `,
+          )
+          .join("");
+        lucide.createIcons();
+      }
+
+      function handleSkillClick(id) {
+        const detailView = document.getElementById("detailView");
+
+        if (activeSkillId === id) {
+          activeSkillId = null;
+          detailView.classList.add("hidden");
+          renderSkills();
+          return;
+        }
+
+        activeSkillId = id;
+        const data = SKILL_DETAILS[id];
+
+        if (data && data.isDSASpecial) {
+          detailView.innerHTML = `
+                    <div class="space-y-8 fade-in-up mt-12">
+                        <div class="glass-card rounded-[40px] p-10 border border-indigo-500/20 shadow-2xl bg-gradient-to-br from-indigo-500/5 to-transparent">
+                            <div class="flex items-center gap-4 mb-4">
+                                <i data-lucide="sparkles" class="w-8 h-8 text-indigo-400"></i>
+                                <h2 class="text-4xl font-black text-white tracking-tight">${data.title}</h2>
+                            </div>
+                            <p class="text-slate-400 text-lg max-w-3xl leading-relaxed">${data.description}</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            ${data.platforms
+                              .map(
+                                (p) => `
+                                <div class="glass-card rounded-[32px] border border-white/10 overflow-hidden flex flex-col group hover:border-indigo-500/50 transition-all shadow-xl">
+                                    <div class="p-8 flex-1">
+                                        <div class="flex justify-between items-start mb-6">
+                                            <div class="p-3 bg-white/5 rounded-2xl text-${p.color}-400">
+                                                <i data-lucide="${p.icon}"></i>
+                                            </div>
+                                            <span class="text-[10px] font-black uppercase bg-slate-900 text-white px-3 py-1 rounded-full border border-white/10">
+                                                ${p.level}
+                                            </span>
+                                        </div>
+                                        <h3 class="text-2xl font-black text-white mb-1">${p.name}</h3>
+                                        <div class="text-indigo-400 text-[10px] font-bold uppercase tracking-widest mb-4">QUALITY: ${p.quality}</div>
+                                        <p class="text-slate-500 text-sm leading-relaxed mb-6">${p.desc}</p>
+                                        <div class="p-4 bg-white/5 rounded-2xl text-[11px] text-slate-400 border-l-4 border-indigo-500 italic">
+                                            "${p.highlight}"
+                                        </div>
+                                    </div>
+                                    <a href="${p.url}" target="_blank" class="bg-indigo-600 text-white p-5 text-center font-bold flex items-center justify-center gap-2 hover:bg-indigo-500 transition-all">
+                                        Start Training <i data-lucide="external-link" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
+                            `,
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                `;
+        } else if (data) {
+          detailView.innerHTML = `
+                    <div class="glass-card rounded-[40px] p-12 md:p-16 border border-white/10 fade-in-up mt-12">
+                         <h2 class="text-3xl font-black text-white mb-2">${data.title}</h2>
+                         <p class="text-slate-400 mb-10 text-lg">${data.description}</p>
+                         <div class="space-y-4">
+                           ${(data.roadmap || [])
+                             .map(
+                               (step, i) => `
+                             <div class="flex items-center justify-between p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-indigo-500/30 transition-all group">
+                                <div class="flex gap-6 items-center">
+                                  <div class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black shadow-lg">
+                                    ${i + 1}
+                                  </div>
+                                  <div>
+                                    <h4 class="font-bold text-white text-lg">${step.content}</h4>
+                                    <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Platform: ${step.platform}</p>
+                                  </div>
+                                </div>
+                                <a href="${step.url}" target="_blank" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white transition-all border border-white/10">
+                                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                             </div>
+                           `,
+                             )
+                             .join("")}
+                         </div>
+                    </div>
+                `;
+        } else {
+          detailView.innerHTML = `
+                    <div class="glass-card p-20 rounded-[40px] text-center border-2 border-dashed border-white/5 fade-in-up mt-12">
+                        <i data-lucide="info" class="w-12 h-12 text-slate-800 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-bold text-slate-500 tracking-tight">Content Coming Soon</h3>
+                        <p class="text-slate-600">Our mentors are currently engineering the specialized path for ${id}.</p>
+                    </div>
+                `;
+        }
+
+        detailView.classList.remove("hidden");
+        renderSkills();
+        lucide.createIcons();
+        detailView.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      // Event Listeners
+      document.getElementById("skillSearch").addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        renderSkills();
+      });
+
+      document.querySelectorAll(".category-pill").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".category-pill")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.dataset.cat;
+          renderSkills();
+        });
+      });
+
+      // Initialize
+      window.onload = () => {
+        renderSkills();
+        lucide.createIcons();
+      };
+    </script>
+  </body>
+</html>

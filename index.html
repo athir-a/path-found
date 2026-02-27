@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Path Found | Your Career Navigator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #020617;
+        color: #f8fafc;
+      }
+
+      .glass-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .btn-resume {
+        background: #4f46e5;
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .btn-resume:hover {
+        background: #6366f1;
+        transform: translateY(-1px);
+        box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
+      }
+
+      .nav-link.active {
+        background: rgba(79, 70, 229, 0.1);
+        color: #818cf8;
+        border: 1px solid rgba(79, 70, 229, 0.2);
+      }
+
+      .skill-progress-bg {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+
+      .hidden-view {
+        display: none;
+      }
+
+      .stat-badge {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="flex min-h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside
+      class="w-64 glass-card border-r border-slate-800/50 p-6 flex flex-col hidden md:flex"
+    >
+      <div class="flex items-center gap-2 mb-10">
+        <div
+          class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+        >
+          <i data-lucide="map-pin" class="text-white w-5 h-5"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white"
+          >Path Found</span
+        >
+      </div>
+
+      <nav class="space-y-2 flex-1">
+        <button
+          onclick="showView('dashboard')"
+          id="nav-dashboard"
+          class="nav-link w-full flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all active"
+        >
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span class="font-medium">Dashboard</span>
+        </button>
+        <button
+          onclick="showView('skills')"
+          id="nav-skills"
+          class="nav-link w-full flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all"
+        >
+          <i data-lucide="award" class="w-5 h-5"></i>
+          <span class="font-medium">My Skills</span>
+        </button>
+        <button
+          class="w-full flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all"
+        >
+          <i data-lucide="milestone" class="w-5 h-5"></i>
+          <span class="font-medium">Roadmaps</span>
+        </button>
+        <a href="explore.html">
+          <button
+            class="w-full flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800/50 rounded-xl transition-all"
+          >
+            <i data-lucide="compass" class="w-5 h-5"></i>
+            <span class="font-medium">Explore</span>
+          </button>
+        </a>
+      </nav>
+
+      <div class="mt-auto pt-6 border-t border-slate-800/50">
+        <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50">
+          <div
+            class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5"
+          >
+            <div
+              class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden"
+            >
+              <img
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                alt="avatar"
+              />
+            </div>
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-sm font-semibold text-white truncate">Alex Rivera</p>
+            <p class="text-[10px] text-slate-500 uppercase font-bold">
+              Lvl 14 Dev
+            </p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <div
+      class="flex-1 overflow-y-auto bg-[radial-gradient(circle_at_50%_0%,_#1e1b4b_0%,_#020617_60%)]"
+    >
+      <!-- DASHBOARD VIEW -->
+      <main
+        id="view-dashboard"
+        class="p-4 md:p-8 animate-in fade-in duration-500"
+      >
+        <header
+          class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+        >
+          <div>
+            <h1
+              class="text-5xl font-black text-white tracking-tight leading-none"
+            >
+              The Grind Continues.
+            </h1>
+            <p class="text-slate-400 text-lg">
+              Visualizing mastery creep across your stack.
+            </p>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div
+            class="lg:col-span-2 glass-card rounded-[32px] p-8 border border-white/5 shadow-2xl"
+          >
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h2 class="text-2xl font-black text-white tracking-tight">
+                  Active Areas and Projects
+                </h2>
+                <p class="text-xs text-slate-500 font-medium">
+                  Slices expand outward as you approach 100% Goal
+                </p>
+              </div>
+            </div>
+            <div class="relative flex justify-center items-center py-6">
+              <div class="w-full max-w-[440px] relative">
+                <canvas id="skillChart"></canvas>
+                <div
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
+                >
+                  <span
+                    class="block text-[10px] font-black text-slate-500 uppercase tracking-widest"
+                    >Mastery</span
+                  >
+                  <span class="block text-2xl font-black text-white">68%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="glass-card rounded-[32px] p-8 shadow-xl">
+              <h3
+                class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-8 flex items-center gap-2"
+              >
+                <i data-lucide="list-todo" class="w-4 h-4"></i> Recent Activity
+              </h3>
+              <div
+                class="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-white/5"
+              >
+                <div class="flex gap-6 relative">
+                  <div
+                    class="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white ring-4 ring-indigo-500/10 z-10"
+                  >
+                    <i data-lucide="zap" class="w-3 h-3"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h5 class="text-sm font-bold text-white">Valid Sudoku</h5>
+                    <p class="text-[10px] text-slate-500 mt-1">
+                      LeetCode • Medium
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-6 relative">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 z-10 border border-white/5"
+                  >
+                    <i data-lucide="git-pull-request" class="w-3 h-3"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h5 class="text-sm font-bold text-slate-300">
+                      OSS Contribution
+                    </h5>
+                    <p class="text-[10px] text-slate-500 mt-1">
+                      GitHub • Pull Request
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-6 relative opacity-40">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-900 flex items-center justify-center text-slate-700 z-10 border border-white/5"
+                  >
+                    <i data-lucide="lock" class="w-3 h-3"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h5 class="text-sm font-bold text-slate-500">
+                      System Design Mock
+                    </h5>
+                    <p class="text-[10px] text-slate-600 mt-1">
+                      Unlock at Level 15
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="glass-card rounded-[32px] p-8 border border-white/5 shadow-xl"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div class="space-y-1">
+                  <h3
+                    class="text-4xl font-extrabold text-white tracking-tighter"
+                  >
+                    DSA Mastery
+                  </h3>
+                  <p class="text-sm italic text-slate-400">
+                    "The hardest road is the most rewarding."
+                  </p>
+                </div>
+                <button
+                  class="btn-resume px-6 py-3 rounded-2xl text-xs font-bold text-white text-center leading-tight"
+                >
+                  Resume<br />Training
+                </button>
+              </div>
+              <div class="mt-10 space-y-4">
+                <div
+                  class="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase"
+                >
+                  <span class="text-slate-500">Milestone: Linked Lists</span>
+                  <span class="text-slate-300">12 / 18 Steps</span>
+                </div>
+                <div
+                  class="h-2.5 w-full bg-slate-800/50 rounded-full overflow-hidden p-0.5"
+                >
+                  <div
+                    class="h-full w-[66%] bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(79,70,229,0.4)]"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- MY SKILLS VIEW -->
+      <main
+        id="view-skills"
+        class="p-4 md:p-8 animate-in slide-in-from-right-4 duration-500 hidden-view"
+      >
+        <header class="mb-12">
+          <h1
+            class="text-5xl font-black text-white tracking-tight leading-none mb-2"
+          >
+            Technical Footprint
+          </h1>
+          <p class="text-slate-400 text-lg">
+            Quantitative breakdown of concepts implemented and tech validated
+            via GitHub & LeetCode.
+          </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- CONCEPT IMPLEMENTATIONS -->
+          <div class="glass-card rounded-[32px] p-8 border border-white/5">
+            <div class="flex items-center justify-between mb-8">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-blue-500/10 rounded-xl text-blue-400">
+                  <i data-lucide="binary" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white">
+                  DSA Implementations
+                </h2>
+              </div>
+              <div
+                class="stat-badge px-3 py-1 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-wider"
+              >
+                142 Problems Solved
+              </div>
+            </div>
+
+            <div class="space-y-8">
+              <!-- Skill Item -->
+              <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                  <div>
+                    <span class="text-white font-bold block"
+                      >Arrays & Hashing</span
+                    >
+                    <span class="text-[10px] text-slate-500"
+                      >42 implementations • HashMaps, Sliding Window,
+                      Two-Pointer</span
+                    >
+                  </div>
+                  <span class="text-[10px] text-blue-400 font-black"
+                    >92% COVERAGE</span
+                  >
+                </div>
+                <div
+                  class="h-1.5 w-full skill-progress-bg rounded-full overflow-hidden"
+                >
+                  <div class="h-full w-[92%] bg-blue-500"></div>
+                </div>
+              </div>
+              <!-- Skill Item -->
+              <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                  <div>
+                    <span class="text-white font-bold block"
+                      >Dynamic Programming</span
+                    >
+                    <span class="text-[10px] text-slate-500"
+                      >12 implementations • Memoization, Tabulation
+                      (1D/2D)</span
+                    >
+                  </div>
+                  <span class="text-[10px] text-blue-400 font-black"
+                    >28% COVERAGE</span
+                  >
+                </div>
+                <div
+                  class="h-1.5 w-full skill-progress-bg rounded-full overflow-hidden"
+                >
+                  <div class="h-full w-[28%] bg-blue-500"></div>
+                </div>
+              </div>
+              <!-- Skill Item -->
+              <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                  <div>
+                    <span class="text-white font-bold block"
+                      >Trees & Graphs</span
+                    >
+                    <span class="text-[10px] text-slate-500"
+                      >18 implementations • BFS, DFS, Dijkstra's</span
+                    >
+                  </div>
+                  <span class="text-[10px] text-blue-400 font-black"
+                    >45% COVERAGE</span
+                  >
+                </div>
+                <div
+                  class="h-1.5 w-full skill-progress-bg rounded-full overflow-hidden"
+                >
+                  <div class="h-full w-[45%] bg-blue-500"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TECH STACKS (Parsed from Repos) -->
+          <div class="glass-card rounded-[32px] p-8 border border-white/5">
+            <div class="flex items-center justify-between mb-8">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-purple-500/10 rounded-xl text-purple-400">
+                  <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white">
+                  Stack Utilization
+                </h2>
+              </div>
+              <div
+                class="stat-badge px-3 py-1 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-wider"
+              >
+                8 Active Projects
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+              <!-- Stack Detail -->
+              <div
+                class="p-5 rounded-2xl bg-white/5 border border-white/5 flex gap-6 items-center"
+              >
+                <div
+                  class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 font-black text-xl"
+                >
+                  R
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-1">
+                    <h4 class="font-bold text-white text-lg">
+                      React Ecosystem
+                    </h4>
+                    <span class="text-[10px] font-bold text-slate-500"
+                      >FOUND IN 5 REPOS</span
+                    >
+                  </div>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span
+                      class="text-[9px] font-bold text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20"
+                      >Next.js</span
+                    >
+                    <span
+                      class="text-[9px] font-bold text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20"
+                      >Redux Toolkit</span
+                    >
+                    <span
+                      class="text-[9px] font-bold text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20"
+                      >Tailwind CSS</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stack Detail -->
+              <div
+                class="p-5 rounded-2xl bg-white/5 border border-white/5 flex gap-6 items-center"
+              >
+                <div
+                  class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center text-green-400 font-black text-xl"
+                >
+                  N
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-1">
+                    <h4 class="font-bold text-white text-lg">
+                      Node.js / Backend
+                    </h4>
+                    <span class="text-[10px] font-bold text-slate-500"
+                      >OSS CONTRIBUTOR</span
+                    >
+                  </div>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span
+                      class="text-[9px] font-bold text-green-300 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20"
+                      >Express</span
+                    >
+                    <span
+                      class="text-[9px] font-bold text-green-300 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20"
+                      >PostgreSQL</span
+                    >
+                    <span
+                      class="text-[9px] font-bold text-green-300 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20"
+                      >Docker</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTRIBUTION ANALYTICS -->
+        <div
+          class="mt-8 glass-card rounded-[32px] p-8 border border-white/5 overflow-hidden relative"
+        >
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] -mr-32 -mt-32"
+          ></div>
+          <h3 class="text-xl font-bold text-white mb-6">
+            Open Source & Project Impact
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+              <span class="text-3xl font-black text-white">24</span>
+              <p
+                class="text-[10px] text-slate-500 font-bold uppercase tracking-wider"
+              >
+                Merged PRs
+              </p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-3xl font-black text-white">1.2k</span>
+              <p
+                class="text-[10px] text-slate-500 font-bold uppercase tracking-wider"
+              >
+                Lines Contributed
+              </p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-3xl font-black text-white">3</span>
+              <p
+                class="text-[10px] text-slate-500 font-bold uppercase tracking-wider"
+              >
+                Architectural Features
+              </p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-3xl font-black text-white">92</span>
+              <p
+                class="text-[10px] text-slate-500 font-bold uppercase tracking-wider"
+              >
+                Total Commits
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // --- NAVIGATION LOGIC ---
+      function showView(viewName) {
+        // Toggle Views
+        document.getElementById("view-dashboard").classList.add("hidden-view");
+        document.getElementById("view-skills").classList.add("hidden-view");
+        document
+          .getElementById("view-" + viewName)
+          .classList.remove("hidden-view");
+
+        // Update Nav UI
+        document
+          .querySelectorAll(".nav-link")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById("nav-" + viewName).classList.add("active");
+
+        // Refresh icons for new view
+        lucide.createIcons();
+      }
+
+      // --- DASHBOARD CHART LOGIC ---
+      const laneBackgroundPlugin = {
+        id: "laneBackground",
+        beforeDatasetsDraw(chart) {
+          const {
+            ctx,
+            scales: { r },
+          } = chart;
+          const dataset = chart.data.datasets[0];
+          const meta = chart.getDatasetMeta(0);
+          ctx.save();
+          meta.data.forEach((element, index) => {
+            const startAngle = element.startAngle;
+            const endAngle = element.endAngle;
+            const innerRadius = r.getDistanceFromCenterForValue(0);
+            const outerRadius = r.getDistanceFromCenterForValue(100);
+            const baseColor = dataset.backgroundColor[index];
+            const ghostColor = baseColor.replace(/[\d.]+\)$/g, "0.15)");
+            ctx.beginPath();
+            ctx.arc(r.xCenter, r.yCenter, outerRadius, startAngle, endAngle);
+            ctx.arc(
+              r.xCenter,
+              r.yCenter,
+              innerRadius,
+              endAngle,
+              startAngle,
+              true,
+            );
+            ctx.closePath();
+            ctx.fillStyle = ghostColor;
+            ctx.fill();
+          });
+          ctx.restore();
+        },
+      };
+
+      const chartCtx = document.getElementById("skillChart").getContext("2d");
+      new Chart(chartCtx, {
+        type: "polarArea",
+        plugins: [laneBackgroundPlugin],
+        data: {
+          labels: [
+            "DSA",
+            "Git Mastery",
+            "GSoC",
+            "Resume Building",
+            "Open Source Contributions",
+          ],
+          datasets: [
+            {
+              data: [82, 45, 90, 55, 30],
+              backgroundColor: [
+                "rgba(37, 99, 235, 0.8)",
+                "rgba(56, 189, 248, 0.8)",
+                "rgba(126, 34, 206, 0.8)",
+                "rgba(236, 72, 153, 0.8)",
+                "rgba(99, 102, 241, 0.8)",
+              ],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              startAngle: -90,
+              innerRadius: "20%",
+              angleLines: { display: false },
+              grid: { display: false },
+              ticks: { display: false, max: 100 },
+              pointLabels: {
+                display: true,
+                font: { size: 10, weight: "800" },
+                color: "#64748b",
+              },
+            },
+          },
+          plugins: { legend: { display: false } },
+        },
+      });
+    </script>
+  </body>
+</html>
