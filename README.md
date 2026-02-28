@@ -13,18 +13,18 @@
 - Member 2: Athira K Jayan - Vidya Academy of Science and Technology
 
 ### Hosted Project Link
-[https://athir-a.github.io/path-found/]
+https://athir-a.github.io/path-found/
 
 ### Project Description
-[Path Found automatically tracks your activity across coding platforms and repositories to identify the skills you’ve gained and the areas you’re improving in. Based on your real progress, keep track of how close or far you are to your personal milestones. It also recommends the most suitable resources and guides you step-by-step on how to master each skill effectively.]
+Path Found automatically tracks your activity across coding platforms and repositories to identify the skills you’ve gained and the areas you’re improving in. Based on your real progress, keep track of how close or far you are to your personal milestones. It also recommends the most suitable resources and guides you step-by-step on how to master each skill effectively.
 
 ### The Problem statement
-[Aspiring IT professionals face confusion and decision fatigue due to scattered learning resources and the absence of personalized, skill-based guidance. There is no unified system that tracks real coding activity and translates it into measurable skill development with clear next steps.]
+Aspiring IT professionals face confusion and decision fatigue due to scattered learning resources and the absence of platforms that encourage self-learning, a clear path, and clear milestones. There is no unified system that tracks real coding activity and translates it into measurable skill development.
 
 ### The Solution
-[We solve this by creating a platform that connects to users’ coding and development platforms to track their real activity and progress.
+We solve this by creating a platform that connects to users’ coding and development platforms to track their actual activity and progress.
 The system analyzes projects, problem-solving practice, and tech stacks used to identify acquired skills and improvement areas.
-Based on this data, it generates a personalized, evolving roadmap and recommends the most relevant resources to help users systematically master each skill.]
+Based on this data, users gain insight into what skills they have and how close or far they are to clear milestones.
 
 ---
 
