@@ -61,12 +61,17 @@ Dashboard
 Shows the user's progress with various projects, including customised ones like pursuing GSoC internship program. On the right side are the user's recent activities across different platforms.
 
 
+
 <img width="2705" height="1423" alt="image" src="https://github.com/user-attachments/assets/388a8b25-4e65-463b-a939-34bb878195ce" />
 My skills
 Overview of skills based on the user's activity
 
+
+
 <img width="2250" height="1290" alt="image" src="https://github.com/user-attachments/assets/b616541c-eefb-4e7f-bbfa-1f84470b9280" />
 Explore page
 Shows relevant skills based on various tags selected at the top.
+
+
 
 Made with ❤️ at TinkerHub
